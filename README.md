@@ -1,6 +1,8 @@
 # Snake Game made in Rust
 
 This is my first project in Rust
+
+
 To run it
 
 ```shell
