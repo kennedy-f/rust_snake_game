@@ -10,37 +10,34 @@ use glutin_window::GlutinWindow;
 use opengl_graphics::{GlGraphics, OpenGL};
 
 mod food;
-use food::Food;
 
 mod snake;
-use snake::{SnakePieces, Snake};
 
 mod game;
-use game::{Game, Direction};
 
 use std::collections::LinkedList;
 
-fn bootstrap_game(rows: u32, cols: u32, square_width: u32, opengl: OpenGL ) -> Game {
+fn bootstrap_game(rows: u32, cols: u32, square_width: u32, opengl: OpenGL ) -> game::Game {
     use rand::Rng;
     let x = rand::thread_rng().gen_range(1..cols);
     let y  = rand::thread_rng().gen_range(1..rows);
 
-    return Game {
+    return game::Game {
         gl: GlGraphics::new(opengl),
         rows: rows,
         cols: cols,
         square_width: square_width,
         just_eaten: false,
-        food: Food { 
+        food: food::Food { 
             x:  x, 
             y: y, 
         },
         score: 0,
-        snake: Snake {
+        snake: snake::Snake {
             gl: GlGraphics::new(opengl),
             width: square_width,
-            direction: Direction::DOWN,
-            parts: LinkedList::from_iter((vec![SnakePieces(cols/2, rows/2)]).into_iter())
+            direction: game::Direction::DOWN,
+            parts: LinkedList::from_iter((vec![snake::SnakePieces(cols/2, rows/2)]).into_iter())
         }
     };
 }
