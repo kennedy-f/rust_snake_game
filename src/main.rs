@@ -20,7 +20,7 @@ use game::{Game, Direction};
 
 use std::collections::LinkedList;
 
-fn BootstrapGame(rows: u32, cols: u32, square_width: u32, opengl: OpenGL ) -> Game {
+fn bootstrap_game(rows: u32, cols: u32, square_width: u32, opengl: OpenGL ) -> Game {
     use rand::Rng;
     let x = rand::thread_rng().gen_range(1..cols);
     let y  = rand::thread_rng().gen_range(1..rows);
@@ -62,7 +62,7 @@ fn main() {
         .build()
         .unwrap();
 
-    let mut game = BootstrapGame(ROWS, COLS, SQUARE_WIDTH, opengl);
+    let mut game = bootstrap_game(ROWS, COLS, SQUARE_WIDTH, opengl);
   
     let mut events = Events::new(EventSettings::new()).ups(10);
     while let Some(e) = events.next(&mut window) {
@@ -72,7 +72,7 @@ fn main() {
 
         if let Some(u) = e.update_args() {
             if !game.update(&u) {
-                game = BootstrapGame(ROWS, COLS, SQUARE_WIDTH, opengl);
+                game = bootstrap_game(ROWS, COLS, SQUARE_WIDTH, opengl);
             }
         }
 
