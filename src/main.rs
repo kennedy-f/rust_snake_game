@@ -20,6 +20,30 @@ use game::{Game, Direction};
 
 use std::collections::LinkedList;
 
+fn BootstrapGame(rows: u32, cols: u32, square_width: u32, opengl: OpenGL ) -> Game {
+    use rand::Rng;
+    let x = rand::thread_rng().gen_range(1..cols);
+    let y  = rand::thread_rng().gen_range(1..rows);
+
+    return Game {
+        gl: GlGraphics::new(opengl),
+        rows: rows,
+        cols: cols,
+        square_width: square_width,
+        just_eaten: false,
+        food: Food { 
+            x:  x, 
+            y: y, 
+        },
+        score: 0,
+        snake: Snake {
+            gl: GlGraphics::new(opengl),
+            width: square_width,
+            direction: Direction::DOWN,
+            parts: LinkedList::from_iter((vec![SnakePieces(cols/2, rows/2)]).into_iter())
+        }
+    };
+}
 
 fn main() {
     let opengl = OpenGL::V3_2;
@@ -38,22 +62,8 @@ fn main() {
         .build()
         .unwrap();
 
-    let mut game = Game {
-        gl: GlGraphics::new(opengl),
-        rows: ROWS,
-        cols: COLS,
-        square_width: SQUARE_WIDTH,
-        just_eaten: false,
-        food: Food { x: 1, y: 1 },
-        score: 0,
-        snake: Snake {
-            gl: GlGraphics::new(opengl),
-            width: SQUARE_WIDTH,
-            direction: Direction::DOWN,
-            parts: LinkedList::from_iter((vec![SnakePieces(COLS/2, ROWS/2)]).into_iter())
-        }
-    };
-
+    let mut game = BootstrapGame(ROWS, COLS, SQUARE_WIDTH, opengl);
+  
     let mut events = Events::new(EventSettings::new()).ups(10);
     while let Some(e) = events.next(&mut window) {
         if let Some(r) = e.render_args() {
@@ -62,7 +72,7 @@ fn main() {
 
         if let Some(u) = e.update_args() {
             if !game.update(&u) {
-                break;
+                game = BootstrapGame(ROWS, COLS, SQUARE_WIDTH, opengl);
             }
         }
 

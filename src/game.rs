@@ -31,7 +31,7 @@ pub struct Game {
 
 impl Game {
     pub fn render(&mut self, args: &RenderArgs) {
-        const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
+        const GREEN: [f32; 4] = [0.40, 1.0, 0.77, 0.8];
 
         self.gl.draw(args.viewport(), |_c, gl| {
             graphics::clear(GREEN, gl)
@@ -74,14 +74,19 @@ impl Game {
         true
     }
 
+
     pub fn pressed(&mut self, btn: &Button) {
         let last_direction = self.snake.direction.clone();
 
         self.snake.direction = match btn {
             &Button::Keyboard(Key::Up) if last_direction != Direction::DOWN => Direction::UP,
+            &Button::Keyboard(Key::W) if last_direction != Direction::DOWN => Direction::UP,
             &Button::Keyboard(Key::Down) if last_direction != Direction::UP => Direction::DOWN,
+            &Button::Keyboard(Key::S) if last_direction != Direction::UP => Direction::DOWN,
             &Button::Keyboard(Key::Left) if last_direction != Direction::RIGHT => Direction::LEFT,
+            &Button::Keyboard(Key::A) if last_direction != Direction::RIGHT => Direction::LEFT,
             &Button::Keyboard(Key::Right) if last_direction != Direction::LEFT => Direction::RIGHT,
+            &Button::Keyboard(Key::D) if last_direction != Direction::LEFT => Direction::RIGHT,
             _ => last_direction,
         }
     }
